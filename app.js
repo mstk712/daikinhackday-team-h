@@ -19,7 +19,7 @@ var ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
 
 var tone_analyzer = new ToneAnalyzerV3({
   username: 'c3666c10-56e0-41c0-9f3b-35e319373185',
-  password: 'DH0M1yqC4S75',
+  password: 'password',
   version_date: '2016-05-19'
 });
 
@@ -114,8 +114,8 @@ preset.sadness = {
     "fan_direction": 4
   }
 };
-//var endpoint_uri = "https://api-08.daikin.ishikari-dc.net/equipments/";
-var endpoint_uri = "https://api.daikin.ishikari-dc.net/equipments/";
+
+var endpoint_uri = "https://example.daikin.ishikari-dc.net/equipments/";
 
 //preset.area = [
 //  [70,71,72,74,75],
@@ -146,7 +146,7 @@ app.post('/api/hackey/:power', function(req, res, next) {
       var options = {
         url: endpoint_uri + _id + '/',
         headers: {
-          "Authorization": "Basic ZGFpa2luOnBpY2hvbmt1bg==",
+          "Authorization": "Basic ==",
           "Content-Type": "application/json"
         },
         json: {
@@ -259,7 +259,7 @@ app.post('/api/air/:emotion', function(req, res, next) {
       var options = {
         url: endpoint_uri + _id + '/',
         headers: {
-          "Authorization": "Basic ZGFpa2luOnBpY2hvbmt1bg==",
+          "Authorization": "Basic ==",
           "Content-Type": "application/json"
         },
         json: {
@@ -286,9 +286,9 @@ app.get('/api/air', function(req, res){
   console.log(req);
 
   var options = {
-    url: "https://api-08.daikin.ishikari-dc.net/equipments/",
+    url: "https://example-08.daikin.ishikari-dc.net/equipments/",
     headers: {
-      "Authorization": "Basic ZGFpa2luOnBpY2hvbmt1bg=="
+      "Authorization": "Basic =="
     },
     json: true
   };
