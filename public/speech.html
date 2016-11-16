@@ -1,0 +1,115 @@
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Web Speech API</title>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<!-- Loading Bootstrap -->
+<link href="dist/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- Loading Flat UI -->
+<link href="dist/css/flat-ui.min.css" rel="stylesheet">
+
+<script>
+
+function emotionAnger() {
+    var data = {};
+    $.ajax({
+      type: "post",
+      url: "/api/air/anger",
+      data: JSON.stringify(data),
+      contentType: 'application/json', 
+      dataType: "json",
+      success: function(json_data) {   // 200 OK時
+            // JSON Arrayの先頭が成功フラグ、失敗の場合2番目がエラーメッセージ
+            //if (!json_data[0]) {    // サーバが失敗を返した場合
+            //    alert("Transaction error. " + json_data[1]);
+            //    return;
+            //}
+            // 成功時処理
+            //location.reload();
+            $("#pichonkun").val("空調設定を変更しました");
+       },
+       error: function() {         // HTTPエラー時
+            alert("Server Error. Pleasy try again later.");
+       },
+       complete: function() {      // 成功・失敗に関わらず通信が終了した際の処理
+            //button.attr("disabled", false);  // ボタンを再び enableにする
+       }
+    });
+}
+window.SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
+var recognition = new webkitSpeechRecognition();
+recognition.lang = 'ja';
+
+// 録音終了時トリガー
+recognition.addEventListener('result', function(event){
+    var _text = event.results.item(0).item(0).transcript;
+    $("#result_text").val(_text);
+
+    var data = {
+      text: _text
+    };
+
+    $.ajax({
+      type: "post",
+      url: "/api/tone",
+      data: JSON.stringify(data),
+      contentType: 'application/json', 
+      dataType: "json",
+      success: function(json_data) {   // 200 OK時
+            // JSON Arrayの先頭が成功フラグ、失敗の場合2番目がエラーメッセージ
+//            if (!json_data[0]) {    // サーバが失敗を返した場合
+//                alert("Transaction error. " + json_data[1]);
+//                return;
+//            }
+            // 成功時処理
+            //location.reload();
+            emotionAnger();
+       },
+       error: function() {         // HTTPエラー時
+            alert("Server Error. Pleasy try again later.");
+       },
+       complete: function() {      // 成功・失敗に関わらず通信が終了した際の処理
+            //button.attr("disabled", false);  // ボタンを再び enableにする
+       }
+    });
+}, false);
+
+// 録音開始
+function recordStart()
+{
+    recognition.start();
+}
+function recordStop()
+{
+    recognition.stop();
+}
+</script>
+</head>
+
+<body style="background-image: url(images/emocon.jpg); background-repeat: repeat;">
+
+<div class="container">
+
+
+<h1>emocon</h1>
+
+<div id="content">
+<center>
+  <textarea id="result_text" cols="80" rows="4">
+  </textarea>
+  <br />
+  <input type="button" onClick="recordStart()" value="Start" />
+  <br />
+  <input type="text" id="pichonkun" value="" style="width: 360px;"/>
+</center>
+</div>
+
+</div>
+
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="../dist/js/vendor/video.js"></script>
+<script src="../dist/js/flat-ui.min.js"></script>
+
+</body>
+</html>
